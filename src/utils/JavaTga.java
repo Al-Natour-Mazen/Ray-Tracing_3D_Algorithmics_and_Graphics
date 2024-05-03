@@ -62,7 +62,7 @@ public class JavaTga
     /**
      * @param args no command line arguments
      */
-    public static void main(String[] args) {
+    private static void main(String[] args) {
         int w=1024;
         int h=768;
         byte buffer[]=new byte[3*w*h];
