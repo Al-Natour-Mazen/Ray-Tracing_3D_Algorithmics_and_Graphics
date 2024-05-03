@@ -5,7 +5,7 @@ package utils;
  * 
  * @author Mazen
  */
-public class Vec3 {
+public class MyVec3 {
 
 	private double x;
 	private double y;
@@ -18,7 +18,7 @@ public class Vec3 {
 	 * @param y the y coordinate
 	 * @param z the z coordinate
 	 */
-	public Vec3(final double x, final double y, final double z) {
+	public MyVec3(final double x, final double y, final double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -27,7 +27,7 @@ public class Vec3 {
 	/**
 	 * Constructor by default.
 	 */
-	public Vec3() {
+	public MyVec3() {
 		this(0.0D, 0.0D, 0.0D);
 	}
 
@@ -61,8 +61,8 @@ public class Vec3 {
 	 * @param v the vector to add
 	 * @return the result of the addition
 	 */
-	public Vec3 add(Vec3 v) {
-		return new Vec3(this.x + v.x, this.y + v.y, this.z + v.z);
+	public MyVec3 add(MyVec3 v) {
+		return new MyVec3(this.x + v.x, this.y + v.y, this.z + v.z);
 	}
 
 	/**
@@ -71,8 +71,8 @@ public class Vec3 {
 	 * @param c the vector to subtract
 	 * @return the result of the subtraction
 	 */
-	public Vec3 sub(Vec3 c) {
-		return new Vec3(this.x - c.x, this.y - c.y, this.z - c.z);
+	public MyVec3 sub(MyVec3 c) {
+		return new MyVec3(this.x - c.x, this.y - c.y, this.z - c.z);
 	}
 
 	/**
@@ -81,8 +81,8 @@ public class Vec3 {
 	 * @param s the scalar
 	 * @return the result of the multiplication
 	 */
-	public Vec3 mul(double s) {
-		return new Vec3(this.x * s, this.y * s, this.z * s);
+	public MyVec3 mul(double s) {
+		return new MyVec3(this.x * s, this.y * s, this.z * s);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class Vec3 {
 	 * @param v the vector to compute the dot product with
 	 * @return the dot product
 	 */
-	public double dotProduct(Vec3 v) {
+	public double dotProduct(MyVec3 v) {
 		return this.x * v.x + this.y * v.y + this.z * v.z;
 	}
 
