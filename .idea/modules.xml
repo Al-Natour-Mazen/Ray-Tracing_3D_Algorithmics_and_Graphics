@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Ray-Tracing_AL NATOUR_Mazen.iml" filepath="$PROJECT_DIR$/Ray-Tracing_AL NATOUR_Mazen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Ray-Tracing.iml" filepath="$PROJECT_DIR$/Ray-Tracing.iml" />
     </modules>
   </component>
 </project>
