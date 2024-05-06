@@ -3,7 +3,7 @@ package objects;
 import utils.MyColor;
 import utils.MyVec3;
 
-public class IntersectObjectDrawOptions {
+public class IntersectableObjectDrawableOptions {
 
     private final MyColor color;
     private final MyColor specularColor;
@@ -15,7 +15,7 @@ public class IntersectObjectDrawOptions {
      * @param objColor         the color of the object
      * @param specularColor the specular color of the object
      */
-    public IntersectObjectDrawOptions(MyColor objColor, MyColor specularColor, double shininess) {
+    public IntersectableObjectDrawableOptions(MyColor objColor, MyColor specularColor, double shininess) {
         this.color = objColor;
         this.specularColor = specularColor;
         this.shininess = shininess;
