@@ -33,7 +33,7 @@ public class JavaTga
      * @throws UnsupportedEncodingException
      * @throws IOException
      */
-    protected static void saveTGA(String filename, byte buffer[], int width, int height) throws IOException, UnsupportedEncodingException {
+    protected static void saveTGA(String filename, byte[] buffer, int width, int height) throws IOException, UnsupportedEncodingException {
 
         FileOutputStream fout = new FileOutputStream(new File(filename));
 
@@ -65,7 +65,7 @@ public class JavaTga
     private static void main(String[] args) {
         int w=1024;
         int h=768;
-        byte buffer[]=new byte[3*w*h];
+        byte[] buffer =new byte[3*w*h];
 
         for(int row = 0; row < h; row++){ // for each row of the image
             for(int col = 0; col < w; col++){ // for each column of the image
