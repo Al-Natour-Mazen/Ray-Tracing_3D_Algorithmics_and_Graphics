@@ -1,6 +1,6 @@
 package scenes;
 
-import objects.IntersectObjectDrawOptions;
+import objects.IntersectableObjectDrawableOptions;
 import objects.IntersectableObject;
 import rendering.Ray;
 import utils.MyColor;
@@ -101,7 +101,7 @@ public abstract class Scene {
             // No intersection found -> return background color (black)
             return MyColor.black;
 
-        IntersectObjectDrawOptions objectIdrawOptions = objectI.getDrawOptions();
+        IntersectableObjectDrawableOptions objectIdrawOptions = objectI.getDrawOptions();
         MyVec3 I = objectI.getIntersectionPoint(origin, direction, lambdaI); // I = P + lambda * v
         MyVec3 nI = objectI.getNormal(I);
 

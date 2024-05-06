@@ -1,6 +1,6 @@
 package objects.geometricsObjects;
 
-import objects.IntersectObjectDrawOptions;
+import objects.IntersectableObjectDrawableOptions;
 import objects.IntersectableObject;
 import utils.MyVec3;
 
@@ -8,7 +8,7 @@ public class Plan extends IntersectableObject {
     private final MyVec3 normal;
     private final double distance;
 
-    public Plan(IntersectObjectDrawOptions options, MyVec3 normal, double distance) {
+    public Plan(IntersectableObjectDrawableOptions options, MyVec3 normal, double distance) {
         super(options);
         this.normal = normal;
         this.distance = distance;

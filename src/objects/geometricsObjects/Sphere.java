@@ -1,7 +1,7 @@
 package objects.geometricsObjects;
 
 import objects.IntersectableObject;
-import objects.IntersectObjectDrawOptions;
+import objects.IntersectableObjectDrawableOptions;
 import utils.MyVec3;
 
 public class Sphere extends IntersectableObject {
@@ -9,7 +9,7 @@ public class Sphere extends IntersectableObject {
     protected final MyVec3 center;
     protected final double radius;
 
-    public Sphere(IntersectObjectDrawOptions options, MyVec3 center, double radius) {
+    public Sphere(IntersectableObjectDrawableOptions options, MyVec3 center, double radius) {
         super(options);
         this.center = center;
         this.radius = radius;

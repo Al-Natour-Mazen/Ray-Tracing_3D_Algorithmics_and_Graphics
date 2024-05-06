@@ -4,14 +4,14 @@ import utils.MyVec3;
 
 public abstract class IntersectableObject  {
 
-    protected IntersectObjectDrawOptions drawOptions;
+    protected IntersectableObjectDrawableOptions drawOptions;
 
     /**
      * Constructor.
      *
      * @param options the draw options
      */
-    public IntersectableObject (IntersectObjectDrawOptions options) {
+    public IntersectableObject (IntersectableObjectDrawableOptions options) {
         this.drawOptions = options;
     }
 
@@ -47,7 +47,7 @@ public abstract class IntersectableObject  {
      *
      * @return the draw options of the object
      */
-    public IntersectObjectDrawOptions getDrawOptions() {
+    public IntersectableObjectDrawableOptions getDrawOptions() {
         return drawOptions;
     }
 
