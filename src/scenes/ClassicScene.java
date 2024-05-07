@@ -2,7 +2,6 @@ package scenes;
 
 import objects.IntersectableObject;
 import objects.IntersectableObjectDrawableOptions;
-import objects.geometricsObjects.Cube;
 import objects.geometricsObjects.Plan;
 import objects.geometricsObjects.Sphere;
 import rendering.Ray;
