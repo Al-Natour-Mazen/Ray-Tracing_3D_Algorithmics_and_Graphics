@@ -13,20 +13,21 @@ public class ClassicScene extends Scene{
 
     @Override
     protected void initObjects() {
-        IntersectableObjectDrawableOptions optionsPlan2 = new IntersectableObjectDrawableOptions(MyColor.red, MyColor.lightGray, 20.0D);
-        IntersectableObject plan1 = new Plan(optionsPlan2, new MyVec3(0.0D, 0.0D, 1.0D), 6.0D);
+        //creation of the plans
+        IntersectableObjectDrawableOptions optionsPlan1 = new IntersectableObjectDrawableOptions(MyColor.red, MyColor.lightGray, 20.0D);
+        IntersectableObject plan1 = new Plan(optionsPlan1, new MyVec3(0.0D, 0.0D, 1.0D), 6.0D);
 
-        IntersectableObjectDrawableOptions optionsPlan3 = new IntersectableObjectDrawableOptions(MyColor.green, MyColor.lightGray, 20.0D);
-        IntersectableObject plan2 = new Plan(optionsPlan3, new MyVec3(1.0D, 0.0D, 0.0D), 3.0D);
+        IntersectableObjectDrawableOptions optionsPlan2 = new IntersectableObjectDrawableOptions(MyColor.green, MyColor.lightGray, 20.0D);
+        IntersectableObject plan2 = new Plan(optionsPlan2, new MyVec3(1.0D, 0.0D, 0.0D), 3.0D);
 
-        IntersectableObjectDrawableOptions optionsPlan4 = new IntersectableObjectDrawableOptions(MyColor.coral, MyColor.lightGray, 10.0D);
-        IntersectableObject plan3 = new Plan(optionsPlan4, new MyVec3(-1.0D, 0.0D, 0.0D), 3.0D);
+        IntersectableObjectDrawableOptions optionsPlan3 = new IntersectableObjectDrawableOptions(MyColor.coral, MyColor.lightGray, 10.0D);
+        IntersectableObject plan3 = new Plan(optionsPlan3, new MyVec3(-1.0D, 0.0D, 0.0D), 3.0D);
 
-        IntersectableObjectDrawableOptions optionsPlan5 = new IntersectableObjectDrawableOptions(MyColor.cyan, MyColor.lightGray, 10.0D);
-        IntersectableObject plan4 = new Plan(optionsPlan5, new MyVec3(0.0D, 1.0D, 0.0D), 1.5D);
+        IntersectableObjectDrawableOptions optionsPlan4 = new IntersectableObjectDrawableOptions(MyColor.cyan, MyColor.lightGray, 10.0D);
+        IntersectableObject plan4 = new Plan(optionsPlan4, new MyVec3(0.0D, 1.0D, 0.0D), 1.5D);
 
-        IntersectableObjectDrawableOptions optionsPlan6 = new IntersectableObjectDrawableOptions(MyColor.magenta, MyColor.lightGray, 10.0D);
-        IntersectableObject plan5 = new Plan(optionsPlan6, new MyVec3(0.0D, -1.0D, 0.0D), 1.5D);
+        IntersectableObjectDrawableOptions optionsPlan5 = new IntersectableObjectDrawableOptions(MyColor.magenta, MyColor.lightGray, 10.0D);
+        IntersectableObject plan5 = new Plan(optionsPlan5, new MyVec3(0.0D, -1.0D, 0.0D), 1.5D);
 
         objects.add(plan1);
         objects.add(plan2);
@@ -34,6 +35,7 @@ public class ClassicScene extends Scene{
         objects.add(plan4);
         objects.add(plan5);
 
+        // Creation of the spheres
         IntersectableObjectDrawableOptions optionsSphere1 = new IntersectableObjectDrawableOptions(MyColor.teal, MyColor.white, 10.0D);
         IntersectableObject sphere1 = new Sphere(optionsSphere1, new MyVec3(-2.0D, -0.5D, -4.0D), 0.5D);
 
@@ -56,5 +58,10 @@ public class ClassicScene extends Scene{
     protected void initLights() {
        Ray light = new Ray(new MyVec3(1D, 1D, 0D), MyColor.white, MyColor.lightGray);
        lights.add(light);
+    }
+
+    @Override
+    protected void initSceneParameters() {
+      // we don't need to override this method
     }
 }
