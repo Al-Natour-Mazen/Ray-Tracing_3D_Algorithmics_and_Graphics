@@ -9,7 +9,7 @@ public class Ray {
     private final MyColor diffuse;
     private final MyColor specular;
 
-    public static MyColor AMBIENT_LIGHT = MyColor.black;
+    public static MyColor BASIC_AMBIENT_RAY = MyColor.black;
 
     /**
      * Constructor.
