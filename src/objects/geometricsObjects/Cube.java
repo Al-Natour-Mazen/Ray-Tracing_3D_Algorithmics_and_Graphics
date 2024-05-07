@@ -6,13 +6,8 @@ import utils.MyVec3;
 
 public class Cube extends IntersectableObject {
 
-    protected final MyVec3 center;
-    protected final double sideLength;
-
-    public Cube(IntersectableObjectDrawableOptions options, MyVec3 center, double sideLength) {
+    public Cube(IntersectableObjectDrawableOptions options) {
         super(options);
-        this.center = center;
-        this.sideLength = sideLength;
     }
 
     @Override
