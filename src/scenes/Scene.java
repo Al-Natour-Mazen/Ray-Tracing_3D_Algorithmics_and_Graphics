@@ -12,8 +12,12 @@ public abstract class Scene {
 
     protected final ArrayList<IntersectableObject> objects;
     protected final ArrayList<Ray> lights;
-    private MyVec3 observerPosition = new MyVec3();
-    private double imagePlaneDistance = 1D;
+
+    // Parameters of the scene
+    protected MyVec3 observerPosition = new MyVec3();
+    protected double imagePlaneDistance = 1D;
+    protected boolean allowReflections = false;
+    protected boolean allowRefractions = false;
 
     /**
      * Constructor.
@@ -44,6 +48,14 @@ public abstract class Scene {
      * Initialize the lights of the scene.
      */
     protected abstract void initLights();
+
+    /**
+     * Initialize the parameters of the scene, such as Activation of reflections, refractions, setting the observer
+     * position and the image plane distance etc.
+     * By default, all parameters have default values. if you want to change them, you can override this method in the
+     * subclass and set the parameters as you wish. otherwise, you can leave it as is.
+     */
+    protected abstract void initSceneParameters();
 
     /**
      * @return the observer position
@@ -140,6 +152,14 @@ public abstract class Scene {
 
                 color = color.add(diffuse).add(specular);
             }
+        }
+
+        if(allowReflections){
+            // do something
+        }
+
+        if(allowRefractions){
+            // do something
         }
 
         return color;
