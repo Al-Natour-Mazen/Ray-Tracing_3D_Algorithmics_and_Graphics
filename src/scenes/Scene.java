@@ -76,66 +76,67 @@ public abstract class Scene {
     /**
      * Main method of the raytracer to find the color of a pixel.
      *
-     * @param origin the origin (P) of the ray
-     * @param direction the direction (V) of the ray
-     * @param depth the depth of the recursion
+     * @param rayOrigin the origin (P) of the ray
+     * @param rayDirection the direction (V) of the ray
+     * @param recursionDepth the depth of the recursion
      * @return the color of the pixel
      */
-    public MyColor findColor(MyVec3 origin, MyVec3 direction, int depth) {
-        if (depth == 0)
-            return Ray.AMBIENT_LIGHT;
+    public MyColor findColor(MyVec3 rayOrigin, MyVec3 rayDirection, int recursionDepth) {
+        if (recursionDepth == 0)
+            return Ray.BASIC_AMBIENT_RAY;
 
-        double lambdaI = Double.MAX_VALUE;
-        IntersectableObject objectI = null;
+        double closestIntersectionDistance = Double.MAX_VALUE;
+        IntersectableObject closestIntersectedObject = null;
 
         for (IntersectableObject object : this.objects) {
-            double lambdaObj = object.getIntersection(origin, direction);
+            double intersectionDistance = object.getIntersection(rayOrigin, rayDirection);
 
-            if (lambdaObj > 0.0D && lambdaObj < lambdaI) {
-                lambdaI = lambdaObj;
-                objectI = object;
+            if (intersectionDistance > 0.0D && intersectionDistance < closestIntersectionDistance) {
+                closestIntersectionDistance = intersectionDistance;
+                closestIntersectedObject = object;
             }
         }
 
-        if (objectI == null)
+        if (closestIntersectedObject == null)
             // No intersection found -> return background color (black)
             return MyColor.black;
 
-        IntersectableObjectDrawableOptions objectIdrawOptions = objectI.getDrawOptions();
-        MyVec3 I = objectI.getIntersectionPoint(origin, direction, lambdaI); // I = P + lambda * v
-        MyVec3 nI = objectI.getNormal(I);
+        IntersectableObjectDrawableOptions objectDrawOptions = closestIntersectedObject.getDrawOptions();
+        MyVec3 intersectionPoint = closestIntersectedObject.getIntersectionPoint(rayOrigin, rayDirection, closestIntersectionDistance); // intersectionPoint = rayOrigin + closestIntersectionDistance * rayDirection
+        MyVec3 normalAtIntersection = closestIntersectedObject.getNormal(intersectionPoint);
 
-        boolean inside = nI.dotProduct(direction) > 0.0D;
-        if (inside)
-            nI = nI.mul(-1.0D);
+        boolean isInside = normalAtIntersection.dotProduct(rayDirection) > 0.0D;
+        if (isInside){
+            normalAtIntersection = normalAtIntersection.mul(-1.0D); // normalAtIntersection = -normalAtIntersection
+        }
 
-        MyColor color = objectIdrawOptions.getColor(I).multiply(new MyColor(0, 0, 0)); // object.color * ambientColor
+        MyColor color = objectDrawOptions.getColor(intersectionPoint).multiply(Ray.BASIC_AMBIENT_RAY); // object.color * ambientColor
 
         for (Ray light : this.lights) {
-            MyVec3 IS = light.getPosition().sub(I); // IS = S - I
+            MyVec3 lightDirection = light.getPosition().sub(intersectionPoint); // lightDirection = lightPosition - intersectionPoint
 
-            boolean visible = true;
+            boolean isVisible = true;
 
             for (IntersectableObject object : this.objects) {
-                double lambdaObj = object.getIntersection(I, IS);
+                double intersectionDistance = object.getIntersection(intersectionPoint, lightDirection);
 
-                if (0.0D < lambdaObj && lambdaObj < 1.0D)
-                    visible = false;
+                if (0.0D < intersectionDistance && intersectionDistance < 1.0D)
+                    isVisible = false;
             }
 
-            if (visible) {
-                nI.normalize(); // nI / ||nI||
-                IS.normalize(); // IS / ||IS||
-                direction.normalize(); // v / ||v||
+            if (isVisible) {
+                normalAtIntersection.normalize(); // normalAtIntersection / ||normalAtIntersection||
+                lightDirection.normalize(); // lightDirection / ||lightDirection||
+                rayDirection.normalize(); // rayDirection / ||rayDirection||
 
-                double nIDotIS = Math.max(nI.dotProduct(IS), 0.0D); // niDotIS = max(nI . IS, 0)
+                double dotProductNormalLight = Math.max(normalAtIntersection.dotProduct(lightDirection), 0.0D); // dotProductNormalLight = max(normalAtIntersection . lightDirection, 0)
 
-                MyVec3 r = IS.sub(nI.mul(2.0D * nIDotIS)); // r = IS - 2 * nIDotIS * nI
-                double rDotV = Math.max(r.dotProduct(direction), 0.0D); // rDotV = max(r . v, 0)
+                MyVec3 reflectionDirection = lightDirection.sub(normalAtIntersection.mul(2.0D * dotProductNormalLight)); // reflectionDirection = lightDirection - 2 * dotProductNormalLight * normalAtIntersection
+                double dotProductReflectionRay = Math.max(reflectionDirection.dotProduct(rayDirection), 0.0D); // dotProductReflectionRay = max(reflectionDirection . rayDirection, 0)
 
-                MyColor diffuse = light.getDiffuse().multiply(objectIdrawOptions.getColor(I)).multiply(nIDotIS); // light.diffuse * object.color * niDotIS
-                MyColor specular = light.getSpecular().multiply(objectIdrawOptions.getSpecularColor())
-                        .multiply(Math.pow(rDotV, objectIdrawOptions.getShininess())); // light.specular * object.specularColor * pow(rDotV,object.shininess)
+                MyColor diffuse = light.getDiffuse().multiply(objectDrawOptions.getColor(intersectionPoint)).multiply(dotProductNormalLight); // light.diffuse * object.color * dotProductNormalLight
+                MyColor specular = light.getSpecular().multiply(objectDrawOptions.getSpecularColor())
+                        .multiply(Math.pow(dotProductReflectionRay, objectDrawOptions.getShininess())); // light.specular * object.specularColor * pow(dotProductReflectionRay,object.shininess)
 
                 color = color.add(diffuse).add(specular);
             }
@@ -143,5 +144,4 @@ public abstract class Scene {
 
         return color;
     }
-
 }
