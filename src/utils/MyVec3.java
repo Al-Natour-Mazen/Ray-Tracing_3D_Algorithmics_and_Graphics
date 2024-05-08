@@ -109,4 +109,17 @@ public class MyVec3 {
 		}
 	}
 
+	/**
+	 * Compute the cross product of this vector and another vector.
+	 *
+	 * @param v the vector to compute the cross product with
+	 * @return the cross product
+	 */
+	public MyVec3 crossProduct(MyVec3 v) {
+		double newX = this.y * v.z - this.z * v.y;
+		double newY = this.z * v.x - this.x * v.z;
+		double newZ = this.x * v.y - this.y * v.x;
+		return new MyVec3(newX, newY, newZ);
+	}
+
 }
