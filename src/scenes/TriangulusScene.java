@@ -37,6 +37,7 @@ public class TriangulusScene extends Scene{
             objects.add(Sun);
         }
 
+        
 
     }
 
