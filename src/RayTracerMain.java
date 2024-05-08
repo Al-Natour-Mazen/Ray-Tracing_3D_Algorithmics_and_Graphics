@@ -1,6 +1,7 @@
 import scenes.BackRoomScene;
 import scenes.ClassicScene;
 import scenes.Scene;
+import scenes.TriangulusScene;
 import utils.JavaTga;
 import utils.MyColor;
 import utils.MyVec3;
@@ -9,12 +10,12 @@ public class RayTracerMain extends JavaTga {
 
 
     public static void main(String[] args) {
-        int maxDepth = 1;
+        int maxDepth = 5;
         int w = 1280;
-        int h = 750;
+        int h = 735;
 
         String filename = "outputImages/scene_" + maxDepth + "_" + w + "x" + h + ".tga";
-        Scene scene = new BackRoomScene();
+        Scene scene = new TriangulusScene();
         MyVec3 P = scene.getObserverPosition();
         double D = scene.getImagePlaneDistance();
         scene.buildScene();
