@@ -156,7 +156,7 @@ public class MyVec3 {
 	public MyVec3 projection(MyVec3 v) {
 		return v.mul(this.dotProduct(v) / v.dotProduct(v));
 	}
-	
+
 	/**
 	 *
 	 * @return the string representation of the vector
