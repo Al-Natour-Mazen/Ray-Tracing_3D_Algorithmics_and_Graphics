@@ -35,6 +35,7 @@ public abstract class Scene {
     public void buildScene(){
         initLights();
         initObjects();
+        initSceneParameters();
         if(objects.isEmpty() || lights.isEmpty())
             throw new IllegalArgumentException("The scene must contain at least one object and one light.");
     }
