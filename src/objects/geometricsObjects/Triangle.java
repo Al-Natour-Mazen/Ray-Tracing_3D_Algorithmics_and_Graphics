@@ -66,34 +66,49 @@ public class Triangle extends IntersectableObject {
     @Override
     public double getIntersection(MyVec3 origin, MyVec3 direction) {
         // Calculation of coefficients for intersection calculation
-        double a = v0.getX() - v1.getX(), b = v0.getX() - v2.getX(), c = direction.getX(), d = v0.getX() - origin.getX();
-        double e = v0.getY() - v1.getY(), f = v0.getY() - v2.getY(), g = direction.getY(), h = v0.getY() - origin.getY();
-        double i = v0.getZ() - v1.getZ(), j = v0.getZ() - v2.getZ(), k = direction.getZ(), l = v0.getZ() - origin.getZ();
+        double a = v0.getX() - v1.getX();  // Difference in x-coordinates between v0 and v1
+        double b = v0.getX() - v2.getX();  // Difference in x-coordinates between v0 and v2
+        double c = direction.getX();       // X-component of the ray direction
+        double d = v0.getX() - origin.getX();  // Difference in x-coordinates between v0 and the origin of the ray
+        double e = v0.getY() - v1.getY();  // Difference in y-coordinates between v0 and v1
+        double f = v0.getY() - v2.getY();  // Difference in y-coordinates between v0 and v2
+        double g = direction.getY();       // Y-component of the ray direction
+        double h = v0.getY() - origin.getY();  // Difference in y-coordinates between v0 and the origin of the ray
+        double i = v0.getZ() - v1.getZ();  // Difference in z-coordinates between v0 and v1
+        double j = v0.getZ() - v2.getZ();  // Difference in z-coordinates between v0 and v2
+        double k = direction.getZ();       // Z-component of the ray direction
+        double l = v0.getZ() - origin.getZ();  // Difference in z-coordinates between v0 and the origin of the ray
 
         // More calculations for intersection
-        double m = f * k - g * j, n = h * k - g * l, p = f * l - h * j;
-        double q = g * i - e * k, s = e * j - f * i;
+        double m = f * k - g * j;  // Cross product component fy * kz - gy * jz
+        double n = h * k - g * l;  // Cross product component hy * kz - gy * lz
+        double p = f * l - h * j;  // Cross product component fy * lz - hy * jz
+        double q = g * i - e * k;  // Cross product component gy * ix - ey * kz
+        double s = e * j - f * i;  // Cross product component ey * jz - fy * ix
 
         // Inverse of the denominator
         double invDenom = 1 / (a * m + b * q + c * s);
 
         // Intersection calculation
-        double e1 = d * m - b * n - c * p;
-        double beta = e1 * invDenom;
+        double e1 = d * m - b * n - c * p;  // Determinant of matrix [d, b, c; n, q, s; p, r, s]
+        double beta = e1 * invDenom;  // Intersection parameter along edge v0v1
 
+        // Check if intersection parameter is outside the triangle
         if (beta < 0)
             return -1; // No intersection if beta is negative
 
-        double r = e * l - h * i;
-        double e2 = a * n + d * q + c * r;
-        double gamma = e2 * invDenom;
+        double r = e * l - h * i;  // Cross product component ey * lz - hy * iz
+        double e2 = a * n + d * q + c * r;  // Determinant of matrix [a, d, c; n, q, s; r, p, s]
+        double gamma = e2 * invDenom;  // Intersection parameter along edge v0v2
 
+        // Check if intersection parameter is outside the triangle
         if (gamma < 0 || beta + gamma > 1)
             return -1; // No intersection if gamma is negative or beta + gamma > 1
 
-        double e3 = a * p - b * r + d * s;
-        double t = e3 * invDenom;
+        double e3 = a * p - b * r + d * s;  // Determinant of matrix [a, b, d; p, r, s; n, q, s]
+        double t = e3 * invDenom;  // Intersection parameter along the ray
 
+        // Check if the intersection is behind the origin or too close
         if (t < 0.0001D)
             return -1; // No intersection if t is too small
 
