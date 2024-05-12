@@ -122,4 +122,56 @@ public class MyVec3 {
 		return new MyVec3(newX, newY, newZ);
 	}
 
+	/**
+	 *
+	 * @return the length of the vector
+	 */
+	public double length() {
+		return Math.sqrt(this.dotProduct(this));
+	}
+
+	/**
+	 *
+	 * @param v the vector to compare
+	 * @return the angle between the two vectors
+	 */
+	public double angle(MyVec3 v) {
+		return Math.acos(this.dotProduct(v) / (this.length() * v.length()));
+	}
+
+	/**
+	 *
+	 * @param v the vector to compare
+	 * @return the distance between the two vectors
+	 */
+	public double distance(MyVec3 v) {
+		return Math.sqrt(Math.pow(this.x - v.x, 2) + Math.pow(this.y - v.y, 2) + Math.pow(this.z - v.z, 2));
+	}
+
+	/**
+	 *
+	 * @param v the vector to compare
+	 * @return the projection of this vector on the other vector
+	 */
+	public MyVec3 projection(MyVec3 v) {
+		return v.mul(this.dotProduct(v) / v.dotProduct(v));
+	}
+	
+	/**
+	 *
+	 * @return the string representation of the vector
+	 */
+	@Override
+	public String toString() {
+		return "(" + this.x + ", " + this.y + ", " + this.z + ")";
+	}
+
+	/**
+	 *
+	 * @param v the vector to compare
+	 * @return true if the vectors are equal, false otherwise
+	 */
+	public boolean equals(MyVec3 v) {
+		return this.x == v.x && this.y == v.y && this.z == v.z;
+	}
 }
