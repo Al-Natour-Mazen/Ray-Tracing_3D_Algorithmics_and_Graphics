@@ -36,9 +36,6 @@ public class TriangulusScene extends Scene{
             objects.add(triangle);
             objects.add(Sun);
         }
-
-        
-
     }
 
     @Override
