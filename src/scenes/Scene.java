@@ -87,6 +87,13 @@ public abstract class Scene {
     }
 
     /**
+     * @return the name of the scene (class name)
+     */
+    public String getSceneName() {
+        return this.getClass().getSimpleName();
+    }
+
+    /**
      * Main method of the raytracer to find the color of a pixel.
      *
      * @param rayOrigin the origin (P) of the ray
