@@ -15,7 +15,7 @@ public class RayTracerMain extends JavaTga {
         int h = 735;
 
 
-        Scene scene = new TriangulusScene();
+        Scene scene = new ClassicScene();
         String filename = "outputImages/scene_" + scene.getSceneName() + "_" + maxDepth + "_" + w + "x" + h + ".tga";
         MyVec3 P = scene.getObserverPosition();
         double D = scene.getImagePlaneDistance();
