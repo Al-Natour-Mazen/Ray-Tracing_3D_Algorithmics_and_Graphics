@@ -37,6 +37,8 @@ public class MyColor {
     static public final MyColor lightPink = new MyColor(1.F, 0.71F, 0.76F);
     static public final MyColor lightYellow = new MyColor(1.F, 1.F, 0.88F);
     static public final MyColor lightGreen = new MyColor(0.56F, 0.93F, 0.56F);
+    static public final MyColor lightPurple = new MyColor(0.69F, 0.61F, 0.85F);
+    static public final MyColor lightRed = new MyColor(1.F, 0.5F, 0.5F);
     static public final MyColor lightBlue = new MyColor(0.68F, 0.85F, 0.9F);
     static public final MyColor lightCoral = new MyColor(0.94F, 0.5F, 0.5F);
     static public final MyColor lightSkyBlue = new MyColor(0.53F, 0.81F, 0.98F);
