@@ -11,7 +11,12 @@ import utils.MyVec3;
 public class ClassicScene extends Scene{
 
     @Override
-    protected void initObjects() {
+    protected void initSceneParameters() {
+        // we don't need to override this method
+    }
+
+    @Override
+    protected void initSceneObjects() {
         //creation of the plans
         IntersectableObjectDrawableOptions optionsPlan1 = new IntersectableObjectDrawableOptions(MyColor.red, MyColor.lightGray, 20.0D);
         IntersectableObject plan1 = new Plan(optionsPlan1, new MyVec3(0.0D, 0.0D, 1.0D), 6.0D);
@@ -54,13 +59,8 @@ public class ClassicScene extends Scene{
     }
 
     @Override
-    protected void initLights() {
+    protected void initSceneLights() {
        Ray light = new Ray(new MyVec3(1D, 1D, 0D), MyColor.white, MyColor.lightGray);
        lights.add(light);
-    }
-
-    @Override
-    protected void initSceneParameters() {
-      // we don't need to override this method
     }
 }
