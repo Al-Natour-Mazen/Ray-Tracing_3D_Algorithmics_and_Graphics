@@ -23,6 +23,7 @@ public abstract class Scene {
      * Constructor.
      */
     public Scene() {
+        initSceneParameters();
         objects = new ArrayList<>();
         lights = new ArrayList<>();
     }
@@ -33,22 +34,11 @@ public abstract class Scene {
      * the Observer position is set by default to (0, 0, 0) and the image plane distance to 1.
      */
     public void buildScene(){
-        initLights();
-        initObjects();
-        initSceneParameters();
+        initSceneObjects();
+        initSceneLights();
         if(objects.isEmpty() || lights.isEmpty())
             throw new IllegalArgumentException("The scene must contain at least one object and one light.");
     }
-
-    /**
-     * Initialize the objects of the scene.
-     */
-    protected abstract void initObjects();
-
-    /**
-     * Initialize the lights of the scene.
-     */
-    protected abstract void initLights();
 
     /**
      * Initialize the parameters of the scene, such as Activation of reflections, refractions, setting the observer
@@ -59,6 +49,16 @@ public abstract class Scene {
     protected abstract void initSceneParameters();
 
     /**
+     * Initialize the objects of the scene.
+     */
+    protected abstract void initSceneObjects();
+
+    /**
+     * Initialize the lights of the scene.
+     */
+    protected abstract void initSceneLights();
+
+    /**
      * @return the observer position
      */
     public MyVec3 getObserverPosition() {
@@ -66,24 +66,10 @@ public abstract class Scene {
     }
 
     /**
-     * @param observerPosition the observer position
-     */
-    public void setObserverPosition(MyVec3 observerPosition) {
-        this.observerPosition = observerPosition;
-    }
-
-    /**
      * @return the image plane distance
      */
     public double getImagePlaneDistance() {
         return imagePlaneDistance;
-    }
-
-    /**
-     * @param imagePlaneDistance the image plane distance
-     */
-    public void setImagePlaneDistance(double imagePlaneDistance) {
-        this.imagePlaneDistance = imagePlaneDistance;
     }
 
     /**
@@ -130,7 +116,8 @@ public abstract class Scene {
             normalAtIntersection = normalAtIntersection.mul(-1.0D); // normalAtIntersection = -normalAtIntersection
         }
 
-        MyColor color = objectDrawOptions.getColor(intersectionPoint).multiply(Ray.BASIC_AMBIENT_RAY); // object.color * ambientColor
+        MyColor color = objectDrawOptions.calculateIntersectionColor(intersectionPoint).multiply(Ray.BASIC_AMBIENT_RAY); // object.color * ambientColor
+
 
         for (Ray light : this.lights) {
             MyVec3 lightDirection = light.getPosition().sub(intersectionPoint); // lightDirection = lightPosition - intersectionPoint
@@ -154,7 +141,7 @@ public abstract class Scene {
                 MyVec3 reflectionDirection = lightDirection.sub(normalAtIntersection.mul(2.0D * dotProductNormalLight)); // reflectionDirection = lightDirection - 2 * dotProductNormalLight * normalAtIntersection
                 double dotProductReflectionRay = Math.max(reflectionDirection.dotProduct(rayDirection), 0.0D); // dotProductReflectionRay = max(reflectionDirection . rayDirection, 0)
 
-                MyColor diffuse = light.getDiffuse().multiply(objectDrawOptions.getColor(intersectionPoint)).multiply(dotProductNormalLight); // light.diffuse * object.color * dotProductNormalLight
+                MyColor diffuse = light.getDiffuse().multiply(objectDrawOptions.calculateIntersectionColor(intersectionPoint)).multiply(dotProductNormalLight); // light.diffuse * object.color * dotProductNormalLight
                 MyColor specular = light.getSpecular().multiply(objectDrawOptions.getSpecularColor())
                         .multiply(Math.pow(dotProductReflectionRay, objectDrawOptions.getShininess())); // light.specular * object.specularColor * pow(dotProductReflectionRay,object.shininess)
 
@@ -163,11 +150,25 @@ public abstract class Scene {
         }
 
         if(allowReflections){
-            // do something
+            double reflectionCoefficient = objectDrawOptions.getReflectionCoefficient();
+            if (reflectionCoefficient > 0.0D) {
+                MyVec3 r = rayDirection.sub(normalAtIntersection.mul(2.0D * normalAtIntersection.dotProduct(rayDirection))); // r = v - 2 * nIDotV * nI
+                r.normalize(); // r / ||r||
+                color = color.add(findColor(intersectionPoint, r, recursionDepth - 1).multiply(reflectionCoefficient)); // color + reflectionCoefficient * findColor(intersectionPoint, r, recursionDepth - 1)
+            }
         }
 
         if(allowRefractions){
-            // do something
+            double transmissionCoefficient = objectDrawOptions.getTransmissionCoefficient();
+            if (transmissionCoefficient > 0.0D) {
+                double refractionIndex = objectDrawOptions.getRefractionIndex();
+                double eta = isInside ? refractionIndex : 1.0D / refractionIndex; // eta = inside ? refractionIndex : 1 / refractionIndex
+                double c1 = -normalAtIntersection.dotProduct(rayDirection); // c1 = nI . v
+                double c2 = Math.sqrt(1.0D - eta * eta * (1.0D - c1 * c1)); // c2 = sqrt(1 - eta^2 * (1 - c1^2))
+                MyVec3 t = rayDirection.mul(eta).add(normalAtIntersection.mul(eta * c1 - c2)); // t = eta * v + (eta * c1 - c2) * nI
+                t.normalize(); // t / ||t||
+                color = color.add(findColor(intersectionPoint, t, recursionDepth - 1).multiply(transmissionCoefficient));
+            }
         }
 
         return color;
