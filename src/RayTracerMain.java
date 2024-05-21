@@ -174,7 +174,7 @@ public class RayTracerMain extends JavaTga {
     private static String generateFilename(Scene scene, int maxDepth, int width, int height) {
         return "outputImages/" + scene.getSceneName() + "_" + maxDepth + "_" + width + "x" + height + ".tga";
     }
-    
+
     /**
      * Saves the image to a file.
      *
