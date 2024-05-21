@@ -12,7 +12,12 @@ import utils.MyVec3;
 public class TriangulusScene extends Scene{
 
     @Override
-    protected void initObjects() {
+    protected void initSceneParameters() {
+        // we don't need to override this method
+    }
+
+    @Override
+    protected void initSceneObjects() {
         // Creation of the walls
         IntersectableObjectDrawableOptions optionsPlan = new IntersectableObjectDrawableOptions(MyColor.lightGray, MyColor.white, 10.0D);
         IntersectableObject leftWall = new Plan(optionsPlan, new MyVec3(1.0D, 0.0D, 0.0D), 3.0D);
@@ -39,7 +44,7 @@ public class TriangulusScene extends Scene{
     }
 
     @Override
-    protected void initLights() {
+    protected void initSceneLights() {
         // Creation of the lights
         Ray light = new Ray(new MyVec3(1D, 1D, 0D), MyColor.white, MyColor.lightGray);
         Ray light2 = new Ray(new MyVec3(2.5D, 2.3D, -7.0D), MyColor.brightRed, MyColor.black);
@@ -47,8 +52,4 @@ public class TriangulusScene extends Scene{
         lights.add(light2);
     }
 
-    @Override
-    protected void initSceneParameters() {
-        // we don't need to override this method
-    }
 }
