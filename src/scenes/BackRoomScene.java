@@ -11,7 +11,12 @@ import utils.MyVec3;
 public class BackRoomScene extends Scene {
 
     @Override
-    protected void initObjects() {
+    protected void initSceneParameters() {
+        // we don't need to override this method
+    }
+
+    @Override
+    protected void initSceneObjects() {
         // Definition of the rendering options for Objects
         IntersectableObjectDrawableOptions wallOptions = new IntersectableObjectDrawableOptions(MyColor.lightGray, MyColor.lightGray, 20.0D);
         IntersectableObjectDrawableOptions sphereOptions = new IntersectableObjectDrawableOptions(MyColor.black, MyColor.white, 10.0D);
@@ -34,13 +39,8 @@ public class BackRoomScene extends Scene {
     }
 
     @Override
-    protected void initLights() {
+    protected void initSceneLights() {
         Ray light = new Ray(new MyVec3(1D, 1D, 0D), MyColor.white, MyColor.lightGray);
         lights.add(light);
-    }
-
-    @Override
-    protected void initSceneParameters() {
-        // we don't need to override this method
     }
 }
