@@ -174,4 +174,23 @@ public class MyVec3 {
 	public boolean equals(MyVec3 v) {
 		return this.x == v.x && this.y == v.y && this.z == v.z;
 	}
+
+	/**
+	 * Negate this vector.
+	 *
+	 * @return the negated vector
+	 */
+	public MyVec3 negate() {
+		return new MyVec3(-this.x, -this.y, -this.z);
+	}
+
+	/**
+	 * Subtract a vector from this vector.
+	 *
+	 * @param v the vector to subtract
+	 * @return the result of the subtraction
+	 */
+	public MyVec3 subtract(MyVec3 v) {
+		return new MyVec3(this.x - v.getX(), this.y - v.getY(), this.z - v.getZ());
+	}
 }
