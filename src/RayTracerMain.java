@@ -11,10 +11,10 @@ public class RayTracerMain extends JavaTga {
     private static final int DEFAULT_WIDTH = 1280;
     private static final int DEFAULT_HEIGHT = 735;
     private static final int DEFAULT_SCENE_NUMBER = 1;
-    private static final int MAX_SCENE_NUMBER = 5;
+    private static final int MAX_SCENE_NUMBER = 6;
     private static final Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
         int sceneNumber = promptForSceneNumber();
         int maxDepth = promptForMaxDepth();
         int width = promptForDimension("width", DEFAULT_WIDTH);
@@ -27,7 +27,9 @@ public class RayTracerMain extends JavaTga {
         double imagePlaneDistance = scene.getImagePlaneDistance();
         scene.buildScene();
 
+        System.out.println("\n-- Rendering the scene... --\n");
         byte[] buffer = renderScene(scene, observerPosition, imagePlaneDistance, maxDepth, width, height);
+        System.out.println("\n-- Rendering completed --\n");
         saveImage(filename, buffer, width, height);
     }
 
@@ -105,6 +107,10 @@ public class RayTracerMain extends JavaTga {
         int dimension = readIntInput("Enter the " + dimensionName + " of the Image: ");
         if (dimension < defaultValue) {
             System.err.println("\t<< The " + dimensionName + " must be greater or equal to " + defaultValue + ", A Default " + dimensionName + " will be chosen >>\n");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ignored) {
+            }
             return defaultValue;
         }
         return dimension;
@@ -119,7 +125,8 @@ public class RayTracerMain extends JavaTga {
                 "\t2: BackRoom Scene : A scene with a lot of spheres and dark weird colors.\n" +
                 "\t3: Triangulus Scene : A scene with triangles and a sun.\n" +
                 "\t4: CheckMate Scene : A scene with a lot of spheres and a check mate board.\n" +
-                "\t5: DiscoMirrorBall Scene : A scene with a lot of spheres and a disco mirror ball.");
+                "\t5: DiscoMirrorBall Scene : A scene with a lot of spheres and a disco mirror ball.\n"+
+                "\t6: WhatACube Scene : A scene with a cube and a plan.\n");
     }
 
     /**
@@ -157,6 +164,8 @@ public class RayTracerMain extends JavaTga {
                 return new CheckMateScene();
             case 5:
                 return new DiscoMirrorBallScene();
+            case 6:
+                return new WhatACubeScene();
             default:
                 throw new IllegalArgumentException("Invalid scene number: " + sceneNumber);
         }
