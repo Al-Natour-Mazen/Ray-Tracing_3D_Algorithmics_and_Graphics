@@ -74,7 +74,6 @@ public class Cube extends IntersectableObject {
 
     @Override
     public double getIntersection(MyVec3 origin, MyVec3 direction) {
-        // Implement the intersection logic (unchanged)
         double tMin = (min.getX() - origin.getX()) / direction.getX();
         double tMax = (max.getX() - origin.getX()) / direction.getX();
 
