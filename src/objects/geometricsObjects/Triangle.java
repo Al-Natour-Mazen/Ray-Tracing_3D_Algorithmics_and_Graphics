@@ -41,6 +41,13 @@ public class Triangle extends IntersectableObject {
         }
     }
 
+    public Triangle(IntersectableObjectDrawableOptions options, MyVec3 v0, MyVec3 v1, MyVec3 v2) {
+        super(options);
+        this.v0 = v0;
+        this.v1 = v1;
+        this.v2 = v2;
+    }
+
     // Method to rotate a point around the X-axis
     private MyVec3 rotatePointX(MyVec3 point, double cosAngle, double sinAngle) {
         double y = point.getY() * cosAngle - point.getZ() * sinAngle;
@@ -65,54 +72,34 @@ public class Triangle extends IntersectableObject {
     // Method to calculate the intersection of a ray with the triangle
     @Override
     public double getIntersection(MyVec3 origin, MyVec3 direction) {
-        // Calculation of coefficients for intersection calculation
-        double a = v0.getX() - v1.getX();  // Difference in x-coordinates between v0 and v1
-        double b = v0.getX() - v2.getX();  // Difference in x-coordinates between v0 and v2
-        double c = direction.getX();       // X-component of the ray direction
-        double d = v0.getX() - origin.getX();  // Difference in x-coordinates between v0 and the origin of the ray
-        double e = v0.getY() - v1.getY();  // Difference in y-coordinates between v0 and v1
-        double f = v0.getY() - v2.getY();  // Difference in y-coordinates between v0 and v2
-        double g = direction.getY();       // Y-component of the ray direction
-        double h = v0.getY() - origin.getY();  // Difference in y-coordinates between v0 and the origin of the ray
-        double i = v0.getZ() - v1.getZ();  // Difference in z-coordinates between v0 and v1
-        double j = v0.getZ() - v2.getZ();  // Difference in z-coordinates between v0 and v2
-        double k = direction.getZ();       // Z-component of the ray direction
-        double l = v0.getZ() - origin.getZ();  // Difference in z-coordinates between v0 and the origin of the ray
+        MyVec3 edge1 = v1.subtract(v0);
+        MyVec3 edge2 = v2.subtract(v0);
+        MyVec3 h = direction.crossProduct(edge2);
+        double a = edge1.dotProduct(h);
 
-        // More calculations for intersection
-        double m = f * k - g * j;  // Cross product component fy * kz - gy * jz
-        double n = h * k - g * l;  // Cross product component hy * kz - gy * lz
-        double p = f * l - h * j;  // Cross product component fy * lz - hy * jz
-        double q = g * i - e * k;  // Cross product component gy * ix - ey * kz
-        double s = e * j - f * i;  // Cross product component ey * jz - fy * ix
+        if (a > -0.00001 && a < 0.00001)
+            return -1; // This ray is parallel to this triangle.
 
-        // Inverse of the denominator
-        double invDenom = 1 / (a * m + b * q + c * s);
+        double f = 1.0 / a;
+        MyVec3 s = origin.subtract(v0);
+        double u = f * s.dotProduct(h);
 
-        // Intersection calculation
-        double e1 = d * m - b * n - c * p;  // Determinant of matrix [d, b, c; n, q, s; p, r, s]
-        double beta = e1 * invDenom;  // Intersection parameter along edge v0v1
+        if (u < 0.0 || u > 1.0)
+            return -1;
 
-        // Check if intersection parameter is outside the triangle
-        if (beta < 0)
-            return -1; // No intersection if beta is negative
+        MyVec3 q = s.crossProduct(edge1);
+        double v = f * direction.dotProduct(q);
 
-        double r = e * l - h * i;  // Cross product component ey * lz - hy * iz
-        double e2 = a * n + d * q + c * r;  // Determinant of matrix [a, d, c; n, q, s; r, p, s]
-        double gamma = e2 * invDenom;  // Intersection parameter along edge v0v2
+        if (v < 0.0 || u + v > 1.0)
+            return -1;
 
-        // Check if intersection parameter is outside the triangle
-        if (gamma < 0 || beta + gamma > 1)
-            return -1; // No intersection if gamma is negative or beta + gamma > 1
+        // At this stage, we can compute t to find out where the intersection point is on the line.
+        double t = f * edge2.dotProduct(q);
 
-        double e3 = a * p - b * r + d * s;  // Determinant of matrix [a, b, d; p, r, s; n, q, s]
-        double t = e3 * invDenom;  // Intersection parameter along the ray
+        if (t > 0.00001) // ray intersection
+            return t;
 
-        // Check if the intersection is behind the origin or too close
-        if (t < 0.0001D)
-            return -1; // No intersection if t is too small
-
-        return t; // Return intersection parameter
+        return -1; // This means that there is a line intersection but not a ray intersection.
     }
 
     // Method to get the normal vector of the triangle at a given intersection point
