@@ -193,4 +193,14 @@ public class MyVec3 {
 	public MyVec3 subtract(MyVec3 v) {
 		return new MyVec3(this.x - v.getX(), this.y - v.getY(), this.z - v.getZ());
 	}
+
+	/**
+	 * Scale this vector by a scalar.
+	 *
+	 * @param s the scalar
+	 * @return the result of the scaling
+	 */
+	public MyVec3 scale(double s) {
+		return new MyVec3(this.x * s, this.y * s, this.z * s);
+	}
 }
