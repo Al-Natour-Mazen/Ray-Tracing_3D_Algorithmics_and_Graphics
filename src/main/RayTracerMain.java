@@ -1,3 +1,5 @@
+package main;
+
 import scenes.*;
 import utils.JavaTga;
 import utils.MyColor;
@@ -14,19 +16,30 @@ public class RayTracerMain extends JavaTga {
     private static final int MAX_SCENE_NUMBER = 6;
     private static final Scanner scanner = new Scanner(System.in);
 
+    public static boolean IS_HDR_IMAGE = false;
+
     public static void main(String[] args)  {
+        if(args.length > 0){
+            System.err.println("\n<< No arguments are allowed. >>\n");
+            System.exit(1);
+        }
+        // Prompt the user to choose the scene number, max depth, width, height, and if the image is HDR
         int sceneNumber = promptForSceneNumber();
         int maxDepth = promptForMaxDepth();
+        IS_HDR_IMAGE = promptForHDR();
         int width = promptForDimension("width", DEFAULT_WIDTH);
         int height = promptForDimension("height", DEFAULT_HEIGHT);
 
+        // Instantiate the chosen scene and generate the filename
         Scene scene = instantiateChosenScene(sceneNumber);
         String filename = generateFilename(scene, maxDepth, width, height);
 
+        // Get the observer position and image plane distance from the scene and build the scene
         MyVec3 observerPosition = scene.getObserverPosition();
         double imagePlaneDistance = scene.getImagePlaneDistance();
         scene.buildScene();
 
+        // Render the scene and save the image
         System.out.println("\n-- Rendering the scene... --\n");
         byte[] buffer = renderScene(scene, observerPosition, imagePlaneDistance, maxDepth, width, height);
         System.out.println("\n-- Rendering completed --\n");
@@ -46,23 +59,92 @@ public class RayTracerMain extends JavaTga {
      */
     private static byte[] renderScene(Scene scene, MyVec3 observerPosition, double imagePlaneDistance, int maxDepth, int width, int height) {
         byte[] buffer = new byte[3 * width * height];
-
+        float[] bufferHDR = new float[3 * width * height];
+        float maxValue = 0.0f;
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 int index = 3 * (row * width + col);
-                MyVec3 direction = new MyVec3(
-                        ((double) col - (double) width / 2.0D) / (double) height,
-                        ((double) row - (double) height / 2.0D) / (double) height,
-                        -imagePlaneDistance);
+                MyVec3 direction = calculateDirection(col, row, width, height, imagePlaneDistance);
                 MyColor color = scene.findColor(observerPosition, direction, maxDepth);
-                buffer[index] = color.getBlue();
-                buffer[index + 1] = color.getGreen();
-                buffer[index + 2] = color.getRed();
+                if(IS_HDR_IMAGE){
+                    maxValue = updateBufferHDR(bufferHDR, index, color, maxValue);
+                }else{
+                    buffer[index] =  (byte) color.getBlue();
+                    buffer[index + 1] =  (byte) color.getGreen();
+                    buffer[index + 2] = (byte)  color.getRed();
+                }
             }
+        }
+
+        if(IS_HDR_IMAGE) {
+            normalizeBufferHDR(buffer, bufferHDR, width, height, maxValue);
         }
 
         return buffer;
     }
+
+    /**
+     * Calculates the direction of the ray based on the column, row, width, height, and image plane distance.
+     *
+     * @param col                the column
+     * @param row                the row
+     * @param width              the width of the image
+     * @param height             the height of the image
+     * @param imagePlaneDistance the image plane distance
+     * @return the direction of the ray
+     */
+    private static MyVec3 calculateDirection(int col, int row, int width, int height, double imagePlaneDistance) {
+        return new MyVec3(
+                ((double) col - (double) width / 2.0D) / (double) height,
+                ((double) row - (double) height / 2.0D) / (double) height,
+                -imagePlaneDistance);
+    }
+
+    /**
+     * Updates the bufferHDR with the color values and returns the maximum value.
+     *
+     * @param bufferHDR the HDR buffer
+     * @param index     the index
+     * @param color     the color
+     * @param maxValue  the maximum value
+     * @return the maximum value
+     */
+    private static float updateBufferHDR(float[] bufferHDR, int index, MyColor color, float maxValue) {
+        bufferHDR[index] = color.getBlue();
+        if(color.getBlue() > maxValue){
+            maxValue = color.getBlue();
+        }
+        bufferHDR[index + 1] = color.getGreen();
+        if(color.getGreen() > maxValue){
+            maxValue = color.getGreen();
+        }
+        bufferHDR[index + 2] = color.getRed();
+        if(color.getRed() > maxValue){
+            maxValue = color.getRed();
+        }
+        return maxValue;
+    }
+
+    /**
+     * Normalizes the bufferHDR and updates the buffer with the normalized values.
+     *
+     * @param buffer    the buffer
+     * @param bufferHDR the HDR buffer
+     * @param width     the width of the image
+     * @param height    the height of the image
+     * @param maxValue  the maximum value
+     */
+    private static void normalizeBufferHDR(byte[] buffer, float[] bufferHDR, int width, int height, float maxValue) {
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                int index = 3 * (row * width + col);
+                buffer[index] = (byte) ((bufferHDR[index] / maxValue) * 255.0F);
+                buffer[index + 1] = (byte) ((bufferHDR[index + 1] / maxValue) * 255.0F);
+                buffer[index + 2] = (byte) ((bufferHDR[index + 2] / maxValue) * 255.0F);
+            }
+        }
+    }
+
 
     /**
      * Prompts the user to choose a scene number.
@@ -114,6 +196,17 @@ public class RayTracerMain extends JavaTga {
             return defaultValue;
         }
         return dimension;
+    }
+
+    /**
+     * Prompts the user to choose if the image is HDR.
+     *
+     * @return true if the image is HDR, false otherwise
+     */
+    private static boolean promptForHDR() {
+        System.out.println(">> Do you want an HDR image? (yes/no)");
+        String input = scanner.next().toLowerCase();
+        return input.equals("yes");
     }
 
     /**
@@ -180,9 +273,10 @@ public class RayTracerMain extends JavaTga {
      * @param height   the height of the image
      * @return the generated filename
      */
-    private static String generateFilename(Scene scene, int maxDepth, int width, int height) {
-        return "outputImages/" + scene.getSceneName() + "_" + maxDepth + "_" + width + "x" + height + ".tga";
-    }
+   private static String generateFilename(Scene scene, int maxDepth, int width, int height) {
+        String hdrSuffix = IS_HDR_IMAGE ? "_HDR" : "";
+        return "outputImages/" + scene.getSceneName() + hdrSuffix + "_" + maxDepth + "_" + width + "x" + height  + ".tga";
+   }
 
     /**
      * Saves the image to a file.
