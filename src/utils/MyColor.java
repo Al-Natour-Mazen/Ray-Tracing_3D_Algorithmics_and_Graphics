@@ -1,5 +1,7 @@
 package utils;
 
+import static main.RayTracerMain.IS_HDR_IMAGE;
+
 public class MyColor {
 
     static public final MyColor black = new MyColor(0.0F, 0.0F, 0.0F);
@@ -87,24 +89,33 @@ public class MyColor {
      *
      * @return the red component
      */
-    public byte getRed() {
-        return (byte) (this.r * 255.0f);
+    public float getRed() {
+        if(IS_HDR_IMAGE){
+            return this.r;
+        }
+        return (this.r * 255.0f);
     }
 
     /**
      *
      * @return the green component
      */
-    public byte getGreen() {
-        return (byte) (this.g * 255.0f);
+    public float getGreen() {
+        if(IS_HDR_IMAGE){
+            return this.g;
+        }
+        return (this.g * 255.0f);
     }
 
     /**
      *
      * @return the blue component
      */
-    public byte getBlue() {
-        return (byte) (this.b * 255.0f);
+    public float getBlue() {
+        if(IS_HDR_IMAGE){
+            return this.b;
+        }
+        return (this.b * 255.0f);
     }
 
     /**
@@ -114,8 +125,19 @@ public class MyColor {
      * @return the resulting color
      */
     public MyColor add(MyColor c) {
-        return new MyColor(Math.min(this.r + c.r, 1.0f), Math.min(this.g + c.g, 1.0f), Math.min(this.b + c.b, 1.0f));
+        float newR = this.r + c.r;
+        float newG = this.g + c.g;
+        float newB = this.b + c.b;
+
+        if (!IS_HDR_IMAGE) {
+            newR = Math.min(newR, 1.0f);
+            newG = Math.min(newG, 1.0f);
+            newB = Math.min(newB, 1.0f);
+        }
+
+        return new MyColor(newR, newG, newB);
     }
+
 
     /**
      * Multiply this color by a color.
@@ -152,4 +174,25 @@ public class MyColor {
         float b=rgb&0xFF;
         return new float[]{r/255.0F,g/255.0F,b/255.0F,1.0F};
     }
+
+    /**
+     * blend two colors together
+     * @param color2 the second color
+     * @param ratio the ratio of the first color
+     * @return the blended color
+     */
+    public MyColor blend(MyColor color2, float ratio) {
+        int red = (int)(this.r * ratio + color2.r * (1 - ratio));
+        int green = (int)(this.g * ratio + color2.g * (1 - ratio));
+        int blue = (int)(this.b * ratio + color2.b * (1 - ratio));
+        return new MyColor(red, green, blue);
+    }
+
+    public MyColor lerp(MyColor endColor, double t) {
+        float r = (float) (this.getRed() * (1 - t) + endColor.getRed() * t);
+        float g = (float) (this.getGreen() * (1 - t) + endColor.getGreen() * t);
+        float b = (float) (this.getBlue() * (1 - t) + endColor.getBlue() * t);
+        return new MyColor(r, g, b);
+    }
+
 }
