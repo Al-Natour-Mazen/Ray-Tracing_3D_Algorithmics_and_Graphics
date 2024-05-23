@@ -6,9 +6,9 @@ import utils.MyVec3;
 
 public class BrickDrawableOptions extends IntersectableObjectDrawableOptions {
 
-    private final MyColor SecondaryColor;
-    private final double brickHeight;
-    private final double brickWidth;
+    protected final MyColor SecondaryColor;
+    protected final double brickHeight;
+    protected final double brickWidth;
 
     public BrickDrawableOptions(MyColor objColor, MyColor specularColor, double shininess, MyColor secondaryColor, double brickHeight, double brickWidth) {
         super(objColor, specularColor, shininess);
