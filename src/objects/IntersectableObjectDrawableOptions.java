@@ -2,6 +2,7 @@ package objects;
 
 import utils.MyColor;
 import utils.MyVec3;
+import utils.Texture;
 
 public class IntersectableObjectDrawableOptions {
 
@@ -11,6 +12,7 @@ public class IntersectableObjectDrawableOptions {
     private double kr;
     private double kt;
     private double eta;
+    private Texture texture;
 
     /**
      * Constructor.
@@ -59,6 +61,22 @@ public class IntersectableObjectDrawableOptions {
         this.kr = reflectionCoeff;
         this.kt = 0.0D;
         this.eta = 0.0D;
+    }
+
+    /**
+     * Constructor with a texture.
+     *
+     * @param shininess         the shininess of the object
+     * @param texture           the texture of the object
+     */
+    public IntersectableObjectDrawableOptions(Texture texture, double shininess) {
+        this.color = MyColor.white;
+        this.specularColor = MyColor.white;
+        this.shininess = shininess;
+        this.kr = 0.0D;
+        this.kt = 0.0D;
+        this.eta = 0.0D;
+        this.texture = texture;
     }
 
     /**
@@ -118,4 +136,13 @@ public class IntersectableObjectDrawableOptions {
     public double getRefractionIndex() {
         return eta;
     }
+
+    /**
+     *
+     * @return the texture of the object
+     */
+    public Texture getTexture() {
+        return texture;
+    }
+
 }
