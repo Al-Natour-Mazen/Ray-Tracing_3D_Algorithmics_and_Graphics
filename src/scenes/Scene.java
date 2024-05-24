@@ -118,6 +118,12 @@ public abstract class Scene {
 
         MyColor color = objectDrawOptions.calculateIntersectionColor(intersectionPoint).multiply(Ray.BASIC_AMBIENT_RAY); // object.color * ambientColor
 
+        // Check if the object has a texture
+        if (objectDrawOptions.getTexture() != null) {
+            // Use the texture color instead of the object color
+            return closestIntersectedObject.getTextureColor(intersectionPoint);
+        }
+
 
         for (Ray light : this.lights) {
             MyVec3 lightDirection = light.getPosition().sub(intersectionPoint); // lightDirection = lightPosition - intersectionPoint
