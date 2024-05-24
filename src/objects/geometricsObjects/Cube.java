@@ -3,6 +3,7 @@ package objects.geometricsObjects;
 import objects.Axis;
 import objects.IntersectableObject;
 import objects.IntersectableObjectDrawableOptions;
+import utils.MyColor;
 import utils.MyVec3;
 
 public class Cube extends IntersectableObject {
@@ -137,5 +138,37 @@ public class Cube extends IntersectableObject {
             return new MyVec3(0, 0, -1);
         else
             return new MyVec3(0, 0, 1);
+    }
+
+    @Override
+    public MyColor getTextureColor(MyVec3 I) {
+        // Calculate the local coordinates of the intersection point
+        MyVec3 localI = I.subtract(min);
+
+        // Calculate the size of the cube
+        MyVec3 size = max.subtract(min);
+
+        // Calculate the normalized local coordinates
+        MyVec3 normalizedI = new MyVec3(localI.getX() / size.getX(), localI.getY() / size.getY(), localI.getZ() / size.getZ());
+
+        // Determine which face of the cube is intersected
+        double maxVal = Math.max(normalizedI.getX(), Math.max(normalizedI.getY(), normalizedI.getZ()));
+        double u, v;
+        if (maxVal == normalizedI.getX()) {
+            // Left or right face
+            u = normalizedI.getZ();
+            v = normalizedI.getY();
+        } else if (maxVal == normalizedI.getY()) {
+            // Bottom or top face
+            u = normalizedI.getX();
+            v = normalizedI.getZ();
+        } else {
+            // Front or back face
+            u = normalizedI.getX();
+            v = normalizedI.getY();
+        }
+
+        // Get color from texture
+        return drawOptions.getTexture().getColor(u, v);
     }
 }

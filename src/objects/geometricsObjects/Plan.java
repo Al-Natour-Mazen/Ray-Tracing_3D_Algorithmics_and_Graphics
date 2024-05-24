@@ -2,6 +2,7 @@ package objects.geometricsObjects;
 
 import objects.IntersectableObjectDrawableOptions;
 import objects.IntersectableObject;
+import utils.MyColor;
 import utils.MyVec3;
 
 public class Plan extends IntersectableObject {
@@ -32,5 +33,30 @@ public class Plan extends IntersectableObject {
     @Override
     public MyVec3 getNormal(MyVec3 I) {
         return normal;
+    }
+
+    @Override
+    public MyColor getTextureColor(MyVec3 I) {
+        // Choose an arbitrary vector not parallel to the normal
+        MyVec3 arbitraryVector = (Math.abs(normal.getX()) > Math.abs(normal.getY()))
+                ? new MyVec3(normal.getZ(), 0, -normal.getX())
+                : new MyVec3(0, -normal.getZ(), normal.getY());
+
+        // Create uAxis and vAxis as orthogonal vectors on the plane
+        MyVec3 uAxis = normal.crossProduct(arbitraryVector);
+        uAxis.normalize();
+        MyVec3 vAxis = normal.crossProduct(uAxis);
+        vAxis.normalize();
+        // Project the intersection point I onto the plane's local coordinate system
+        MyVec3 pointOnPlane = I.subtract(normal.scale(normal.dotProduct(I) + distance));
+        double u = pointOnPlane.dotProduct(uAxis);
+        double v = pointOnPlane.dotProduct(vAxis);
+
+        // Normalize the UV coordinates
+        double uNormalized = u - Math.floor(u);
+        double vNormalized = v - Math.floor(v);
+
+        // Get the color from the texture using the normalized UV coordinates
+        return drawOptions.getTexture().getColor(uNormalized, vNormalized);
     }
 }

@@ -3,6 +3,7 @@ package objects.geometricsObjects;
 import objects.Axis;
 import objects.IntersectableObject;
 import objects.IntersectableObjectDrawableOptions;
+import utils.MyColor;
 import utils.MyVec3;
 
 public class Triangle extends IntersectableObject {
@@ -109,5 +110,35 @@ public class Triangle extends IntersectableObject {
         MyVec3 normal = v1.sub(v0).crossProduct(v2.sub(v0));
         normal.normalize();
         return normal;
+    }
+
+    @Override
+    public MyColor getTextureColor(MyVec3 intersectionPoint) {
+        // Calculate the barycentric coordinates of the intersection point
+        MyVec3 edge1 = v1.subtract(v0);
+        MyVec3 edge2 = v2.subtract(v0);
+        MyVec3 vp = intersectionPoint.subtract(v0);
+
+        double d00 = edge1.dotProduct(edge1);
+        double d01 = edge1.dotProduct(edge2);
+        double d11 = edge2.dotProduct(edge2);
+        double d20 = vp.dotProduct(edge1);
+        double d21 = vp.dotProduct(edge2);
+
+        double denom = d00 * d11 - d01 * d01;
+        double v = (d11 * d20 - d01 * d21) / denom;
+        double w = (d00 * d21 - d01 * d20) / denom;
+        double u = 1.0f - v - w;
+
+        // Define texture coordinates for each vertex
+        double uA = 0, vA = 0; // Texture coordinates for vertex A
+        double uB = 1, vB = 0; // Texture coordinates for vertex B
+        double uC = 0.5, vC = 1; // Texture coordinates for vertex C
+
+        // Interpolate the texture coordinates using barycentric coordinates
+        double texU = u * uA + v * uB + w * uC;
+        double texV = u * vA + v * vB + w * vC;
+
+        return drawOptions.getTexture().getColor(texU, texV);
     }
 }

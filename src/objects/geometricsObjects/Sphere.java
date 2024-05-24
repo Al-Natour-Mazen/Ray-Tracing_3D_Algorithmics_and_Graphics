@@ -2,6 +2,7 @@ package objects.geometricsObjects;
 
 import objects.IntersectableObject;
 import objects.IntersectableObjectDrawableOptions;
+import utils.MyColor;
 import utils.MyVec3;
 
 public class Sphere extends IntersectableObject {
@@ -62,5 +63,26 @@ public class Sphere extends IntersectableObject {
         CI.normalize();
 
         return CI;
+    }
+
+    @Override
+    public MyColor getTextureColor(MyVec3 I) {
+        // Convert intersection point to local coordinates
+        MyVec3 localPoint = I.sub(center);
+        localPoint.normalize();
+
+        // Calculate spherical coordinates
+        double theta = Math.acos(localPoint.getY()); // angle from Y-axis
+        double phi = Math.atan2(localPoint.getZ(), localPoint.getX()); // angle from X-axis in the XZ-plane
+
+        // Convert spherical coordinates to texture coordinates (u, v)
+        double u = (phi + Math.PI) / (2 * Math.PI);
+        double v = theta / Math.PI;
+
+        // Debugging output
+        // System.out.printf("Intersection point: %s, Local point: %s, Spherical coords: (theta: %.2f, phi: %.2f), UV: (%.2f, %.2f)%n", I, localPoint, theta, phi, u, v);
+
+        // Get color from texture
+        return drawOptions.getTexture().getColor(u, v);
     }
 }
