@@ -1,5 +1,6 @@
 package objects;
 
+import utils.MyColor;
 import utils.MyVec3;
 
 public abstract class IntersectableObject  {
@@ -30,6 +31,13 @@ public abstract class IntersectableObject  {
      * @return the normal of the object
      */
     public abstract MyVec3 getNormal(MyVec3 I);
+
+    /**
+     *
+     * @param I the intersection
+     * @return the color of the object
+     */
+    public abstract MyColor getTextureColor(MyVec3 I);
 
     /**
      *
