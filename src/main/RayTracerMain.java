@@ -13,7 +13,7 @@ public class RayTracerMain extends JavaTga {
     private static final int DEFAULT_WIDTH = 1280;
     private static final int DEFAULT_HEIGHT = 735;
     private static final int DEFAULT_SCENE_NUMBER = 1;
-    private static final int MAX_SCENE_NUMBER = 6;
+    private static final int MAX_SCENE_NUMBER = 7;
     private static final Scanner scanner = new Scanner(System.in);
 
     public static boolean IS_HDR_IMAGE = false;
@@ -219,7 +219,8 @@ public class RayTracerMain extends JavaTga {
                 "\t3: Triangulus Scene : A scene with triangles and a sun.\n" +
                 "\t4: CheckMate Scene : A scene with a lot of spheres and a check mate board.\n" +
                 "\t5: DiscoMirrorBall Scene : A scene with a lot of spheres and a disco mirror ball.\n"+
-                "\t6: WhatACube Scene : A scene with a cube and a plan.\n");
+                "\t6: WhatACube Scene : A scene with a cube and a plan.\n" +
+                "\t7: Minecraft Scene : A scene with a lot of cubes and textures of Minecraft.\n");
     }
 
     /**
@@ -259,6 +260,8 @@ public class RayTracerMain extends JavaTga {
                 return new DiscoMirrorBallScene();
             case 6:
                 return new WhatACubeScene();
+            case 7:
+                return new MinecraftScene();
             default:
                 throw new IllegalArgumentException("Invalid scene number: " + sceneNumber);
         }
