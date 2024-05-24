@@ -38,22 +38,27 @@ public class Texture {
      * @return the color
      */
     public MyColor getColor(double u, double v) {
+      // ensure u and v are between 0 and 1
         u = Math.max(0, Math.min(1, u));
         v = Math.max(0, Math.min(1, v));
 
+        // Calculate the pixel coordinates
         int x = (int) (u * (image.getWidth() - 1));
         int y = (int) ((1 - v) * (image.getHeight() - 1));
 
+        // Ensure the pixel coordinates are within the image bounds
         x = Math.max(0, Math.min(x, image.getWidth() - 1));
         y = Math.max(0, Math.min(y, image.getHeight() - 1));
 
         // Use Color to get the RGB values
         Color color = new Color(image.getRGB(x, y));
 
+        // Convert the RGB values to the range [0, 1]
         int red = color.getRed() * 255;
         int green = color.getGreen() * 255;
         int blue = color.getBlue() * 255;
 
+        // Return the color
         return new MyColor(red, green, blue);
     }
 }
