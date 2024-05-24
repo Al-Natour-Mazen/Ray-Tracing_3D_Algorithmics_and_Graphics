@@ -188,6 +188,13 @@ public class MyColor {
         return new MyColor(red, green, blue);
     }
 
+    /**
+     * Linearly interpolate between two colors.
+     *
+     * @param endColor the end color
+     * @param t        the interpolation parameter
+     * @return the interpolated color
+     */
     public MyColor lerp(MyColor endColor, double t) {
         float r = (float) (this.getRed() * (1 - t) + endColor.getRed() * t);
         float g = (float) (this.getGreen() * (1 - t) + endColor.getGreen() * t);
