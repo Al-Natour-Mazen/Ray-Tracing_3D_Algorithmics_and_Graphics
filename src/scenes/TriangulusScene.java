@@ -9,6 +9,10 @@ import rendering.Ray;
 import utils.MyColor;
 import utils.MyVec3;
 
+/**
+ * @author : Mazen
+ * @version : 1.0
+ */
 public class TriangulusScene extends Scene{
 
     @Override

@@ -3,16 +3,49 @@ package objects.entitiesObjects;
 import utils.MyColor;
 import utils.MyVec3;
 
+/**
+ * @author : Mazen
+ * @version : 1.0
+ **/
 public class WeirdDrawableOptions extends BrickDrawableOptions{
-    
+
+    /**
+     * Constructor to create a drawable object with specified options
+     * @param objColor the object color
+     * @param specularColor the specular color
+     * @param shininess the shininess
+     * @param secondaryColor the secondary color
+     * @param brickHeight the brick height
+     * @param brickWidth the brick width
+     */
     public WeirdDrawableOptions(MyColor objColor, MyColor specularColor, double shininess, MyColor secondaryColor, double brickHeight, double brickWidth) {
         super(objColor, specularColor, shininess, secondaryColor, brickHeight, brickWidth);
     }
 
+    /**
+     * Constructor to create a drawable object with specified options
+     * @param objColor the object color
+     * @param specularColor the specular color
+     * @param shininess the shininess
+     * @param secondaryColor the secondary color
+     * @param reflectionCoeff the reflection coefficient
+     * @param brickHeight the brick height
+     * @param brickWidth the brick width
+     */
     public WeirdDrawableOptions(MyColor objColor, MyColor specularColor, double shininess, MyColor secondaryColor, double reflectionCoeff, double transmissionCoeff, double refractionIndex, double brickHeight, double brickWidth) {
         super(objColor, specularColor, shininess, secondaryColor, reflectionCoeff, transmissionCoeff, refractionIndex, brickHeight, brickWidth);
     }
 
+    /**
+     * Constructor to create a drawable object with specified options
+     * @param objColor the object color
+     * @param specularColor the specular color
+     * @param shininess the shininess
+     * @param secondaryColor the secondary color
+     * @param reflectionCoeff the reflection coefficient
+     * @param brickHeight the brick height
+     * @param brickWidth the brick width
+     */
     public WeirdDrawableOptions(MyColor objColor, MyColor specularColor, double shininess, MyColor secondaryColor, double reflectionCoeff, double brickHeight, double brickWidth) {
         super(objColor, specularColor, shininess, secondaryColor, reflectionCoeff, brickHeight, brickWidth);
     }

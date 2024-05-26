@@ -3,6 +3,10 @@ package objects;
 import utils.MyColor;
 import utils.MyVec3;
 
+/**
+ * @author : Mazen
+ * @version : 1.0
+ */
 public abstract class IntersectableObject  {
 
     protected IntersectableObjectDrawableOptions drawOptions;

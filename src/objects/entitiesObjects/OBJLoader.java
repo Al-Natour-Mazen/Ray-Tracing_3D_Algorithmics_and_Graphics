@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author : Mazen
+ * @version : 1.0
+ **/
 public class OBJLoader {
     private final List<MyVec3> vertices;
     private final List<Triangle> triangles;

@@ -4,6 +4,10 @@ import objects.IntersectableObjectDrawableOptions;
 import utils.MyColor;
 import utils.MyVec3;
 
+/**
+ * @author : Mazen
+ * @version : 1.0
+ **/
 public class DraughtboardDrawableOptions extends IntersectableObjectDrawableOptions {
 
     private final MyColor SecondaryColor;

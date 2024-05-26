@@ -3,6 +3,10 @@ package rendering;
 import utils.MyColor;
 import utils.MyVec3;
 
+/**
+ * @author : Mazen
+ * @version : 1.0
+ */
 public class Ray {
 
     private final MyVec3 position;

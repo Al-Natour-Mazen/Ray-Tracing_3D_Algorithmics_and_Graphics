@@ -5,6 +5,10 @@ import objects.IntersectableObjectDrawableOptions;
 import utils.MyColor;
 import utils.MyVec3;
 
+/**
+ * @author : Mazen
+ * @version : 1.0
+ **/
 public class Sphere extends IntersectableObject {
 
     protected final MyVec3 center;

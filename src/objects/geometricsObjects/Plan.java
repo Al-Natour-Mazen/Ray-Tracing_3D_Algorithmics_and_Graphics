@@ -5,6 +5,10 @@ import objects.IntersectableObject;
 import utils.MyColor;
 import utils.MyVec3;
 
+/**
+ * @author : Mazen
+ * @version : 1.0
+ **/
 public class Plan extends IntersectableObject {
     private final MyVec3 normal;
     private final double distance;

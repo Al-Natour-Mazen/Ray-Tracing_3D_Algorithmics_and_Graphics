@@ -5,7 +5,10 @@ import objects.IntersectableObject;
 import objects.IntersectableObjectDrawableOptions;
 import utils.MyColor;
 import utils.MyVec3;
-
+/**
+ * @author : Mazen
+ * @version : 1.0
+ **/
 public class Triangle extends IntersectableObject {
     private MyVec3 v0, v1, v2; // Vertices of the triangle
 
