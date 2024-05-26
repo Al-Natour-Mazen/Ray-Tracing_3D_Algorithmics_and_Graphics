@@ -4,6 +4,10 @@ import utils.MyColor;
 import utils.MyVec3;
 import utils.Texture;
 
+/**
+ * @author : Mazen
+ * @version : 1.0
+ */
 public class IntersectableObjectDrawableOptions {
 
     private final MyColor color;
@@ -67,11 +71,12 @@ public class IntersectableObjectDrawableOptions {
      * Constructor with a texture.
      *
      * @param shininess         the shininess of the object
+     * @param specularColor     the specular color of the object
      * @param texture           the texture of the object
      */
-    public IntersectableObjectDrawableOptions(Texture texture, double shininess) {
-        this.color = MyColor.white;
-        this.specularColor = MyColor.white;
+    public IntersectableObjectDrawableOptions(Texture texture, MyColor specularColor, double shininess) {
+        this.color = MyColor.white; // we don't need the color, we will use the texture color instead
+        this.specularColor = specularColor;
         this.shininess = shininess;
         this.kr = 0.0D;
         this.kt = 0.0D;
@@ -110,6 +115,8 @@ public class IntersectableObjectDrawableOptions {
      * @return the shininess of the object
      */
     public double getShininess() {
+        if(texture != null)
+            return shininess * 1000; //we multiply by 1000 to increase the shininess of the texture
         return shininess;
     }
 
