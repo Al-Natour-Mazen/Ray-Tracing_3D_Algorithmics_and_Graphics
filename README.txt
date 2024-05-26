@@ -1,6 +1,6 @@
 TP7-RayTracing A3D, M1 Informatique.
-
 AL NATOUR Mazen
+
 ===== Archive =====
 
     * Un dossier /src :
@@ -39,11 +39,10 @@ AL NATOUR Mazen
 
     Note : Lors du lancement du programme, suivez les instructions affichées dans le terminal (Le programme n'accepte pas de paramètres en ligne de commande).
 
-    * Le programme commence par lire le fichier de configuration et charger les objets et les lumières.
+    * Le programme commence par lire les configurations fournis  et charger les objets et les lumières.
 
-    * Ensuite, il crée une image en parcourant chaque pixel de l'image et en lançant un rayon pour chaque pixel.
-
-    * Pour chaque rayon, il calcule l'intersection avec les objets et les lumières.
+    * Ensuite, il crée une image en parcourant chaque pixel de l'image et en lançant un rayon pour chaque pixel. Pour chaque rayon,
+       il calcule l'intersection avec les objets et les lumières.
 
     * Enfin, il calcule la couleur du pixel en fonction de l'intersection et de la lumière.
 
