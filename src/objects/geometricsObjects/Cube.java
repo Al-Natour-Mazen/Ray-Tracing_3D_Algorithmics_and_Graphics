@@ -6,6 +6,10 @@ import objects.IntersectableObjectDrawableOptions;
 import utils.MyColor;
 import utils.MyVec3;
 
+/**
+ * @author : Mazen
+ * @version : 1.0
+ **/
 public class Cube extends IntersectableObject {
 
     private MyVec3 min; // Minimum point of the cube
@@ -152,13 +156,13 @@ public class Cube extends IntersectableObject {
         MyVec3 normalizedI = new MyVec3(localI.getX() / size.getX(), localI.getY() / size.getY(), localI.getZ() / size.getZ());
 
         // Determine which face of the cube is intersected
-        double maxVal = Math.max(normalizedI.getX(), Math.max(normalizedI.getY(), normalizedI.getZ()));
+        MyVec3 normal = getNormal(I);
         double u, v;
-        if (maxVal == normalizedI.getX()) {
+        if (normal.equals(new MyVec3(-1, 0, 0)) || normal.equals(new MyVec3(1, 0, 0))) {
             // Left or right face
             u = normalizedI.getZ();
             v = normalizedI.getY();
-        } else if (maxVal == normalizedI.getY()) {
+        } else if (normal.equals(new MyVec3(0, -1, 0)) || normal.equals(new MyVec3(0, 1, 0))) {
             // Bottom or top face
             u = normalizedI.getX();
             v = normalizedI.getZ();
@@ -167,6 +171,10 @@ public class Cube extends IntersectableObject {
             u = normalizedI.getX();
             v = normalizedI.getY();
         }
+
+        // Ensure texture coordinates are within the bounds of the texture
+        u = u % 1.0;
+        v = v % 1.0;
 
         // Get color from texture
         return drawOptions.getTexture().getColor(u, v);
