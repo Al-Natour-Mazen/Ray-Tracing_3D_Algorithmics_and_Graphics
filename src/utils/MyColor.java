@@ -2,6 +2,10 @@ package utils;
 
 import static main.RayTracerMain.IS_HDR_IMAGE;
 
+/**
+ * @author : Mazen
+ * @version : 1.0
+ */
 public class MyColor {
 
     static public final MyColor black = new MyColor(0.0F, 0.0F, 0.0F);
@@ -157,6 +161,26 @@ public class MyColor {
      */
     public MyColor multiply(double s) {
         return new MyColor(this.r * (float) s, this.g * (float) s, this.b * (float) s);
+    }
+
+    /**
+     * Divide this color by a color.
+     *
+     * @param c the color to divide by
+     * @return the resulting color
+     */
+    public MyColor divide(MyColor c) {
+        return new MyColor(this.r / c.r, this.g / c.g, this.b / c.b);
+    }
+
+    /**
+     * Subtract a color from this color.
+     *
+     * @param c the color to subtract
+     * @return the resulting color
+     */
+    public MyColor subtract(MyColor c) {
+        return new MyColor(this.r - c.r, this.g - c.g, this.b - c.b);
     }
 
     /**
