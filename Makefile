@@ -22,5 +22,5 @@ run: all
 # Clean the project
 clean:
 	 @echo ">> Cleaning the project.."
-	 rm -rf $(BINDIR)
+	 @rm -rf $(BINDIR)
 	 @echo ">> Cleaning done"
