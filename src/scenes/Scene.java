@@ -8,6 +8,10 @@ import utils.MyVec3;
 
 import java.util.ArrayList;
 
+/**
+ * @author : Mazen
+ * @version : 1.0
+ */
 public abstract class Scene {
 
     protected final ArrayList<IntersectableObject> objects;
@@ -118,12 +122,6 @@ public abstract class Scene {
 
         MyColor color = objectDrawOptions.calculateIntersectionColor(intersectionPoint).multiply(Ray.BASIC_AMBIENT_RAY); // object.color * ambientColor
 
-        // Check if the object has a texture
-        if (objectDrawOptions.getTexture() != null) {
-            // Use the texture color instead of the object color
-            return closestIntersectedObject.getTextureColor(intersectionPoint);
-        }
-
 
         for (Ray light : this.lights) {
             MyVec3 lightDirection = light.getPosition().sub(intersectionPoint); // lightDirection = lightPosition - intersectionPoint
@@ -147,30 +145,53 @@ public abstract class Scene {
                 MyVec3 reflectionDirection = lightDirection.sub(normalAtIntersection.mul(2.0D * dotProductNormalLight)); // reflectionDirection = lightDirection - 2 * dotProductNormalLight * normalAtIntersection
                 double dotProductReflectionRay = Math.max(reflectionDirection.dotProduct(rayDirection), 0.0D); // dotProductReflectionRay = max(reflectionDirection . rayDirection, 0)
 
-                MyColor diffuse = light.getDiffuse().multiply(objectDrawOptions.calculateIntersectionColor(intersectionPoint)).multiply(dotProductNormalLight); // light.diffuse * object.color * dotProductNormalLight
+               // Calculate specular color
                 MyColor specular = light.getSpecular().multiply(objectDrawOptions.getSpecularColor())
-                        .multiply(Math.pow(dotProductReflectionRay, objectDrawOptions.getShininess())); // light.specular * object.specularColor * pow(dotProductReflectionRay,object.shininess)
+                        .multiply(Math.pow(dotProductReflectionRay, objectDrawOptions.getShininess()));
 
-                color = color.add(diffuse).add(specular);
+                // Check if the object has a texture
+                if (objectDrawOptions.getTexture() != null) {
+                    // Use the texture color instead of the object color
+                    color = closestIntersectedObject.getTextureColor(intersectionPoint);
+                    // Add specular color to the final color
+                    color = color.add(specular);
+                } else {
+                    // Calculate diffuse color
+                    MyColor diffuse = light.getDiffuse().multiply(objectDrawOptions.calculateIntersectionColor(intersectionPoint)).multiply(dotProductNormalLight);
+                    // Add diffuse and specular colors to the final color
+                    color = color.add(diffuse).add(specular);
+                }
             }
         }
 
+        // Reflection
         if(allowReflections){
+            // Calculate the reflection coefficient
             double reflectionCoefficient = objectDrawOptions.getReflectionCoefficient();
+            // If the reflection coefficient is greater than 0
             if (reflectionCoefficient > 0.0D) {
+                // Calculate the reflection direction
                 MyVec3 r = rayDirection.sub(normalAtIntersection.mul(2.0D * normalAtIntersection.dotProduct(rayDirection))); // r = v - 2 * nIDotV * nI
                 r.normalize(); // r / ||r||
                 color = color.add(findColor(intersectionPoint, r, recursionDepth - 1).multiply(reflectionCoefficient)); // color + reflectionCoefficient * findColor(intersectionPoint, r, recursionDepth - 1)
             }
         }
 
+        // Refraction
         if(allowRefractions){
+            // Calculate the transmission coefficient
             double transmissionCoefficient = objectDrawOptions.getTransmissionCoefficient();
+            // If the transmission coefficient is greater than 0
             if (transmissionCoefficient > 0.0D) {
+                // Calculate the refraction index
                 double refractionIndex = objectDrawOptions.getRefractionIndex();
+                // Calculate the eta value
                 double eta = isInside ? refractionIndex : 1.0D / refractionIndex; // eta = inside ? refractionIndex : 1 / refractionIndex
+                // Calculate the c1 and c2 values
                 double c1 = -normalAtIntersection.dotProduct(rayDirection); // c1 = nI . v
+                // Calculate the c2 value
                 double c2 = Math.sqrt(1.0D - eta * eta * (1.0D - c1 * c1)); // c2 = sqrt(1 - eta^2 * (1 - c1^2))
+                // Calculate the transmission direction
                 MyVec3 t = rayDirection.mul(eta).add(normalAtIntersection.mul(eta * c1 - c2)); // t = eta * v + (eta * c1 - c2) * nI
                 t.normalize(); // t / ||t||
                 color = color.add(findColor(intersectionPoint, t, recursionDepth - 1).multiply(transmissionCoefficient));
