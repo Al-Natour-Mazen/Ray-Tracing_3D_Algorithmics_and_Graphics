@@ -1,23 +1,26 @@
-# Variables
+# MakeFile for the RayTracer project By Al Natour Mazen
 JAVAC=javac
 JAVA=java
 CLASSPATH=src
 SRCDIR=src
 BINDIR=bin
-MAINCLASS=RayTracerMain
+MAINCLASS=main.RayTracerMain
 
 # Default target
-all: compile
-
-# Compile the project
-compile:
-	mkdir -p $(BINDIR)
-	$(JAVAC) -d $(BINDIR) -cp $(CLASSPATH) $(SRCDIR)/*.java
+all:
+	 @echo ">> Compiling the project.."
+	 @mkdir -p $(BINDIR)
+	 @mkdir -p outputImages
+	 @find $(SRCDIR) -name "*.java" -print | xargs $(JAVAC) -d $(BINDIR) -cp $(CLASSPATH)
+	 @echo ">> Compilation done"
 
 # Run the project
-run: compile
-	$(JAVA) -cp $(BINDIR) $(MAINCLASS)
+run: all
+	 @echo ">> Running the project.."
+	 @$(JAVA) -cp $(BINDIR) $(MAINCLASS)
 
 # Clean the project
 clean:
-	rm -rf $(BINDIR)
+	 @echo ">> Cleaning the project.."
+	 rm -rf $(BINDIR)
+	 @echo ">> Cleaning done"
