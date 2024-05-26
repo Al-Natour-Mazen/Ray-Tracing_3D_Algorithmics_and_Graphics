@@ -10,8 +10,8 @@ import java.io.IOException;
 /**
  * Represents a texture.
  * A texture is an image that can be applied to an object to give it a more realistic appearance.
- * Author: Mazen
- * Version: 1.0
+ * @author : Mazen
+ * @version : 1.0
  */
 public class Texture {
 
@@ -38,7 +38,7 @@ public class Texture {
      * @return the color
      */
     public MyColor getColor(double u, double v) {
-      // ensure u and v are between 0 and 1
+        // ensure u and v are between 0 and 1
         u = Math.max(0, Math.min(1, u));
         v = Math.max(0, Math.min(1, v));
 
@@ -54,9 +54,9 @@ public class Texture {
         Color color = new Color(image.getRGB(x, y));
 
         // Convert the RGB values to the range [0, 1]
-        int red = color.getRed() * 255;
-        int green = color.getGreen() * 255;
-        int blue = color.getBlue() * 255;
+        float red = color.getRed() / 255.0f;
+        float green = color.getGreen() / 255.0f;
+        float blue = color.getBlue() / 255.0f;
 
         // Return the color
         return new MyColor(red, green, blue);
